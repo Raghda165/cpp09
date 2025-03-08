@@ -6,14 +6,11 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 03:03:41 by ryagoub           #+#    #+#             */
-/*   Updated: 2025/03/08 01:37:57 by ryagoub          ###   ########.fr       */
+/*   Updated: 2025/03/09 02:15:36 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
-
-
-
 
 int main(int ac,char **av)
 {
@@ -25,7 +22,10 @@ int main(int ac,char **av)
      if(db_file)
      {
         while(std::getline(db_file,line))
-            parse(line);
+         {
+			 parse(line);
+
+		 }
      }
    }
 }

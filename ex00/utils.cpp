@@ -102,10 +102,47 @@ std::string parse_date(std::string & s)
 		return("none");
 	return(s);
 }
+int get_difference(t_info user_info, t_info origin_info)
+{
+	int days_difference= abs((user_info.year-origin_info.year)*365)+abs((user_info.month-origin_info.month)*30)+abs(user_info.day-origin_info.day);
+	return(days_difference);
+}
+void extract_info(std::string date ,std::string value, t_info &d)
+{
+	d.value = parse_value(value);
+	std::vector <std::string> d_vec= split(date,'-');
+	std::stringstream ss(d_vec[0]);
+	double num1 ;
+	ss>>num1;
+	d.day= static_cast<int> (num1);
+	std::stringstream s2(d_vec[1]);
+	double num2 ;
+	s2>>num2;
+	d.month= static_cast<int> (num2);
+	std::stringstream s3(d_vec[2]);
+	double num3 ;
+	s3>>num3;
+	d.year= static_cast<int> (num2);
+
+}
+// void db_file(std::string &line)
+// {
+// 	std::string value;
+// 	std::string date;
+// 	t_info origin_info;
+// 	std:: vector <std::string> s_vec=split(line ,',');
+// 	date=s_vec[0];
+// 	value = s_vec[1];
+// 	extract_info( date , value,origin_info);
+// }
+
+
 void parse(std::string &line)
 {
 	std::string date;
 	std::string value;
+	t_info user_info;
+	int target_value= 0;
     if(include_pipe(line))
     {
 		std:: vector <std::string> s_vec=split(line ,'|');
@@ -119,9 +156,31 @@ void parse(std::string &line)
 					return ;}
 			if (parse_date(s_vec[0])== "none")
 			{
-				 return ;}
+				 return ;
+			}
+			extract_info( s_vec[0] , s_vec[1],user_info);
+			std::ifstream user_file("data.csv");
+			std::getline(user_file,line);
+			while(std::getline(user_file,line))
+			{
 
-			BitCoinExchange row(s_vec[0],value);
+				int smallest_difference= 100000000;
+				std::string value;
+				std::string date;
+				t_info origin_info;
+				std:: vector <std::string> s_vec=split(line ,',');
+				date=s_vec[0];
+				value = s_vec[1];
+				extract_info( date , value,origin_info);
+
+				if(smallest_difference > get_difference(user_info,origin_info))
+				{
+						smallest_difference= get_difference(user_info,origin_info);
+						target_value = origin_info.value;
+				}
+			}
+			std::cout<< user_info.day <<" "<<user_info.month<<" "<<user_info.year<<" "<< target_value<<"\n";
+			// BitCoinExchange row(s_vec[0],value);
 		}
 
     }

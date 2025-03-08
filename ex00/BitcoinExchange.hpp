@@ -8,6 +8,13 @@
 #include <iomanip>
 #include <cstdlib>
 #include <fstream>
+ typedef struct s_info
+{
+	int day;
+	int month;
+	int year;
+	float value;
+}t_info;
 class BitCoinExchange
 {
 	private:

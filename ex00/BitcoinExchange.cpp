@@ -64,10 +64,10 @@ double BitCoinExchange:: Get_value(void)
 {
    return(this->_value);
 }
-int return_date()
-{
+// int return_date()
+// {
 
-}
+// }
 
 void BitCoinExchange:: calculate_price(void)
 {
