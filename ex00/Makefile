@@ -1,5 +1,5 @@
 NAME = btc
-CPPFILES = main.cpp BitcoinExchange.cpp utils.cpp
+CPPFILES = main.cpp BitcoinExchange.cpp
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 CPP = c++
 

@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 03:03:41 by ryagoub           #+#    #+#             */
-/*   Updated: 2025/03/09 02:15:36 by ryagoub          ###   ########.fr       */
+/*   Updated: 2025/03/09 07:56:33 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int main(int ac,char **av)
 
      if(db_file)
      {
+		std::getline(db_file,line);
         while(std::getline(db_file,line))
          {
 			 parse(line);
