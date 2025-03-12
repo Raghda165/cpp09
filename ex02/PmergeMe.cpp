@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:21:31 by ryagoub           #+#    #+#             */
-/*   Updated: 2025/03/12 04:16:52 by ryagoub          ###   ########.fr       */
+/*   Updated: 2025/03/12 04:35:35 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,13 @@ void merge(std::vector<int> &vec) {
     }
 }
 
+void insertion(int order , std::vector <int> vec)
+{
+	order = order/2;
+	while (order >= 1)
+	{
+		
+	}
+}
 
 
