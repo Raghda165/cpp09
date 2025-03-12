@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:21:31 by ryagoub           #+#    #+#             */
-/*   Updated: 2025/03/12 04:35:35 by ryagoub          ###   ########.fr       */
+/*   Updated: 2025/03/12 23:49:21 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,61 @@ void swap(T &a , T &b)
 	temp= a;
 	a = b;
 	b = temp;
+}
+void insertion(unsigned int order , std::vector <int> vec)
+{
+	std::cout<<"order"<<order<<"\n";
+	order = order/2;
+	std::cout<<"order"<<order<<"\n";
+	unsigned int group_count=0;
+	while (order >= 8)
+	{
+		std::vector<std::vector<int> > main;
+		std::vector<std::vector<int> > pend;
+		std::vector<std::vector<int> > leftover;
+		unsigned int i = 0;
+        while (i < vec.size())
+		{
+            std::vector<int> pair;
+            for (unsigned int j = 0; j < order && i < vec.size(); j++, i++)
+			{
+                pair.push_back(vec[i]);
+            }
+			if(pair.size() == order)
+			{if(group_count == 0 || group_count %2 != 0)
+				main.push_back(pair);
+			else
+				pend.push_back(pair);}
+			else
+				leftover.push_back(pair);
+			group_count++;
+		}
+		unsigned int k = 0;
+		unsigned int m = 0;
+		unsigned int l = 0;
+		unsigned int n = 0;
+		while (l < pend.size())
+		{
+			n = 0;
+			std::cout<<"pend"<<"[";
+			while(n < pend[l].size())
+			{
+				while (k < main.size())
+				{
+					m = 0;
+					std::cout<<"main"<<"[";
+					while(m < main[k].size()&&main[k][m]<pend[l][n])
+							m++;
+					// if(main[k][m]>pend[l][n])im here 
+
+					k++;
+				}
+			}
+			l++;
+
+		}
+		order= order/2;
+    }
 }
 
 void merge(std::vector<int> &vec) {
@@ -43,7 +98,6 @@ void merge(std::vector<int> &vec) {
             }
 
         }
-
        unsigned int index = 0;
 		for (unsigned int i = 0; i < pair_group.size(); i++)
 		{
@@ -56,15 +110,9 @@ void merge(std::vector<int> &vec) {
 		std::cout<<"the order is"<<order<<"\n";
         order *= 2;
     }
+	insertion( order/2 , vec);
 }
 
-void insertion(int order , std::vector <int> vec)
-{
-	order = order/2;
-	while (order >= 1)
-	{
-		
-	}
-}
+
 
 
