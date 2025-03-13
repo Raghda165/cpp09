@@ -27,7 +27,7 @@ int main(int ac, char ** av)
 		}
 		merge(vec);
 		std::cout<<"Befor: ";
-		for(int i=0 ; i < ac - 1; i++)
+		for(unsigned int i=0 ; i < vec.size(); i++)
 		{
 			std::cout<<vec[i]<<" ";
 		}

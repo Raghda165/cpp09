@@ -15,5 +15,6 @@
  #include <deque>
  #include <vector>
  #include <iostream>
+ #include <cstdlib>
  void  merge(std::vector <int> &vec);
 #endif
