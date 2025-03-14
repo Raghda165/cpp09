@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:21:31 by ryagoub           #+#    #+#             */
-/*   Updated: 2025/03/14 07:24:58 by ryagoub          ###   ########.fr       */
+/*   Updated: 2025/03/14 23:38:40 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,10 @@ void swap(T &a , T &b)
 	a = b;
 	b = temp;
 }
-// pairwise
- void merge_sort(std::vector<int> &vec)
-  {
-	std::vector <std::pair<int,int> > pair_vec;
+
+void make_pairs(std::vector<int> &vec ,std::vector <std::pair<int,int> > &pair_vec )
+{
 	std::pair <int,int> p;
-	std::vector <int> pend;
-	std::vector <int> main;
 	unsigned int i=0;
 	while(i+1 < vec.size())
 	{
@@ -40,31 +37,95 @@ void swap(T &a , T &b)
 			p.first=vec[i + 1];
 			p.second = vec[i];
 		}
-		main.push_back(p.first);
-		pend.push_back(p.second);
+		pair_vec.push_back(p);
 		i+=2;
 	}
-	if(vec.size()%2!=0)
-		pend.push_back(vec[vec.size()-1]);
-	unsigned int j=0;
-	unsigned int k=0;
-	while(j<pend.size())
+
+}
+
+
+
+void deep_swap(int i,std::vector <std::pair<int,int> > &pair_vec,unsigned int order )
+{
+	unsigned int j = 0;
+	while(i >= 0 &&j < order &&(i + order) < pair_vec.size())
 	{
-		while(k < main.size()&&pend[j]> main[k])
+		swap(pair_vec[i],pair_vec[i+order]);
+		i--;
+		j++;
+
+	}
+}
+void sort_large_ones(std::vector <std::pair<int,int> > &pair_vec)
+{
+	unsigned int order = 1;
+
+	while (order <= 2)
+	{
+	    unsigned int i = 0;
+		while(i + order < pair_vec.size())
 		{
-			k++;
+			if(pair_vec[i].second> pair_vec[i+order].second)
+			{
+				deep_swap(i,pair_vec,order);
+			}
+			i += order;
 		}
-		if(k < main.size())
-		{
-			std::cout<<"pend[j]"<<pend[j]<<"\n";
-			main.insert(main.begin() + k, pend[j]);
-			pend.erase(pend.begin() + j);
-			k=0;
-			j--;
-			if(j< pend.size())
-				std::cout<<"after pend[j]"<<pend[j]<<"\n";
-			break ;
-		}
+		order= order * 2;
+	}
+
+}
+// pairwise
+ void merge_sort(std::vector<int> &vec)
+  {
+	std::vector <std::pair<int,int> > pair_vec;
+	std::pair <int,int> p;
+	std::vector <int> pend;
+	std::vector <int> main;
+
+	make_pairs(vec ,pair_vec );
+
+	sort_large_ones(pair_vec);
+
+	unsigned int i=0;
+	while(i < pair_vec.size())
+	{
+		main.push_back(pair_vec[i].second);
+		pend.push_back(pair_vec[i].first);
+		i++;
+	}
+
+
+	if(vec.size()%2!=0)
+	{
+		pend.push_back(vec[vec.size()-1]);
+	}
+	//  unsigned int j=0;
+	//  unsigned int k=0;
+	// while(j<pend.size())
+	// {
+	// 	k=0;
+	// 	while(k+1 < main.size())
+	// 	{
+	// 		if(pend[j] > main[k]&&pend[j]< main[k+1])
+	// 		{
+	// 			main.insert(main.begin() + k+1, pend[j]);
+	// 			break ;
+	// 		}
+	// 		else if(pend[j] < main[k])
+	// 		{
+	// 			main.insert(main.begin() + k, pend[j]);
+	// 			break ;
+	// 		}
+	// 		k++;
+	// 	}
+	// 	j++;
+	// }
+
+	 unsigned int j=0;
+	 while(j<pend.size())
+	{
+		std::cout<<pend[j]<<"\n";
 		j++;
 	}
 	 for (unsigned int i = 0; i < vec.size(); i++)
