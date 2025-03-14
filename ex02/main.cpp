@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:21:58 by ryagoub           #+#    #+#             */
-/*   Updated: 2025/03/12 00:05:13 by ryagoub          ###   ########.fr       */
+/*   Updated: 2025/03/14 07:14:39 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,13 @@ int main(int ac, char ** av)
 			deq.push_back(atoi(av[i]));
 			i++;
 		}
-		merge(vec);
-		std::cout<<"Befor: ";
+		std::cout<<"Before: ";
+		for(unsigned int i=0 ; i < vec.size(); i++)
+		{
+			std::cout<<vec[i]<<" ";
+		}
+		 merge_sort(vec);
+		std::cout<<"After: ";
 		for(unsigned int i=0 ; i < vec.size(); i++)
 		{
 			std::cout<<vec[i]<<" ";
