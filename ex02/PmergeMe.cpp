@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:21:31 by ryagoub           #+#    #+#             */
-/*   Updated: 2025/03/16 05:43:33 by ryagoub          ###   ########.fr       */
+/*   Updated: 2025/03/17 06:11:36 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,50 +42,59 @@ void make_pairs(std::vector<int> &vec ,std::vector <std::pair<int,int> > &pair_v
 	}
 
 }
-int merge_sort(int l,int r,std::vector <std::pair<int,int> > &pair_vec)
-{
-	if(l < r)
-	{
-		merge_sort(l,r,pair_vec);
-	}
-	if(l==r)
-		return l;
+// int merge_sort(int l,int r,std::vector <std::pair<int,int> > &pair_vec)
+// {
+// 	if(l < r)
+// 	{
+// 		merge_sort(l,r,pair_vec);
+// 	}
+// 	if(l==r)
+// 		return l;
 
 
-}
+// }
 
 
 
-void deep_swap(int i,std::vector <std::pair<int,int> > &pair_vec,unsigned int order )
-{
-	unsigned int size = pair_vec.size()/2;
-	int l = 0;
-	int r = pair_vec.size();
-	merge_sort(l,r,pair_vec);
+// void deep_swap(int i,std::vector <std::pair<int,int> > &pair_vec,unsigned int order )
+// {
+// 	unsigned int size = pair_vec.size()/2;
+// 	int l = 0;
+// 	int r = pair_vec.size();
+// 	merge_sort(l,r,pair_vec);
 
-}
-void sort_large_ones(std::vector <std::pair<int,int> > &pair_vec)
-{
-	unsigned int order = 1;
+// }
+// void merge(std::vector <std::pair<int,int> > &pair_vec,std::vector <std::pair<int,int> > &vec_a,std::vector <std::pair<int,int> > &vec_b)
+// {
+// 	unsigned int i = 0;
+// 	unsigned int j = 0;
+// 	static int k;
+// 	while (i < vec_a.size() && j < vec_b.size())
+// 	{
+// 		if(vec_a[i].second<= vec_b[j].second)
+// 		{
+// 			pair_vec[k] = vec_a[i];
+// 			i++;
+// 		}
+// 		else
+// 		{
+// 			pair_vec[k] = vec_b[j];
+// 			j++;
+// 		}
+// 		k++;
+// 	}
+// 	if(i == vec_a.size())
+// 	{
+// 		pair_vec.insert(pair_vec.begin()+ k,vec_b.begin()+j,vec_b.begin()+vec_b.size());
+// 	}
+// 	else if(j == vec_b.size())
+// 	{
+// 		pair_vec.insert(pair_vec.begin()+ k,vec_a.begin()+i,vec_a.begin()+vec_a.size());
+// 	}
 
-	while (order <= pair_vec.size())
-	{
-	    unsigned int i = order - 1;
-		while(i + order < pair_vec.size())
-		{
-			if(pair_vec[i].second> pair_vec[i+order].second)
-			{
-				std::cout<<"pair_vec[i].second"<<pair_vec[i].second<<"\n";
-				std::cout<<"pair_vec[i].second"<<pair_vec[i+1].second<<"\n";
-				deep_swap(i,pair_vec,order);
-			}
-			i += 2* order;
-		}
-		order= order * 2;
-		std::cout<<"order"<<order<<"\n";
-	}
-}
-void print_pair (std::vector <std::pair<int,int> > pair_vec)
+
+// }
+void print_pair (std::vector <std::pair<int,int> > &pair_vec)
 {
 	unsigned int i =0;
 	while(i < pair_vec.size())
@@ -94,6 +103,139 @@ void print_pair (std::vector <std::pair<int,int> > pair_vec)
 		i++;
 	}
 }
+void merge(std::vector<std::pair<int, int> > &pair_vec,
+           std::vector<std::pair<int, int> > &vec_a,
+           std::vector<std::pair<int, int> > &vec_b)
+{
+	std::vector<std::pair<int, int> > sorted_vec;
+    unsigned int i = 0, j = 0;
+    // Resize pair_vec before modifying it
+    // pair_vec.resize(vec_a.size() + vec_b.size());
+	//   pair_vec.clear();
+    // pair_vec.reserve(vec_a.size() + vec_b.size());
+
+    // Merge vec_a and vec_b into pair_vec
+    while (i < vec_a.size() && j < vec_b.size()) {
+        if (vec_a[i].second <= vec_b[j].second) {
+			std::cout<<"im in a"<<"\n";
+            sorted_vec.push_back(vec_a[i++]);
+			std::cout<<"this is  vec_a"<<":";
+			print_pair (vec_a);
+			std::cout<<"this is it"<<"\n"<<"\n";
+        } else {
+            sorted_vec.push_back(vec_b[j++]);
+			std::cout<<"im in b"<<"\n";
+			std::cout<<"this is vec_b"<<":";
+			print_pair (vec_b);
+			std::cout<<"this is it"<<"\n"<<"\n";
+        }
+    }
+
+    // Copy remaining elements from vec_a
+    while (i < vec_a.size()) {
+        sorted_vec.push_back(vec_a[i++]);
+    }
+
+    // Copy remaining elements from vec_b
+    while (j < vec_b.size()) {
+        sorted_vec.push_back(vec_b[j++]);
+    }
+	std::cout<<"this is pair vec"<<":";
+	print_pair (sorted_vec);
+	std::cout<<"this is it"<<"\n"<<"\n";
+	pair_vec = sorted_vec;
+}
+
+
+
+void sort_large_ones(std::vector <std::pair<int,int> > &pair_vec)
+{
+	if (pair_vec.size() <= 1)
+		return ;
+	unsigned int n = pair_vec.size()/2;
+	std::vector <std::pair<int,int> > vec_a(pair_vec.begin(),pair_vec.begin()+n);
+	std::vector <std::pair<int,int> > vec_b(pair_vec.begin()+ n ,pair_vec.begin()+pair_vec.size());
+	sort_large_ones(vec_a);
+	// std::cout<<"this is a"<<":";
+	// print_pair ( vec_a);
+	// std::cout<<"this is b"<<":";
+	// print_pair ( vec_b);
+	sort_large_ones(vec_b);
+	merge(pair_vec,vec_a,vec_b);
+
+}
+void rebuild(std::vector<int> &vec,std::vector <std::pair<int,int> > &pair_vec)
+{
+	unsigned int i = 0;
+	vec.clear();
+	while(i < pair_vec.size())
+	{
+		vec.push_back(pair_vec[i].first);
+		vec.push_back(pair_vec[i].second);
+		i++;
+
+	}
+}
+std::vector<int> Jacobsthal(std::vector<int> &pend)
+{
+	std::vector<int> jacob_sequance;
+	std::vector<int> real_sequance;
+	std::vector<int> comb_sequance;
+	unsigned int j =3;
+	unsigned int i =0;
+	jacob_sequance.push_back(0);
+	jacob_sequance.push_back(1);
+	jacob_sequance.push_back(1);
+
+	while(j < pend.size())
+	{
+		jacob_sequance.push_back(jacob_sequance[j -1]+ 2 *jacob_sequance[j - 2]);
+		j++;
+	}
+
+	while(i < pend.size())
+	{
+		real_sequance.push_back( i+2);
+		i++;
+	}
+	j =1;
+	i = 0;
+	comb_sequance.push_back( jacob_sequance[3]);
+	int last=comb_sequance[0];
+	std::cout<<"\n"<<"\n"<<"im hereeee"<<"\n";
+	while(i<pend.size()&&j<pend.size())
+	{
+		while (real_sequance[i]< last&&real_sequance[i]!= 1)
+		{
+			comb_sequance.push_back(real_sequance[i]);
+			i++;
+		}
+		comb_sequance.push_back (jacob_sequance[j]);
+		last = jacob_sequance[j];
+		j++;
+	}
+	unsigned int l =0;
+	std::cout<<"\n"<<"\n"<<"\n";
+	while (l < comb_sequance.size())
+	{
+		std::cout<<comb_sequance[l]<<"     ";
+		l++;
+	}
+	std::cout<<"\n"<<"\n"<<"\n";
+
+	// unsigned int l =0;
+	// std::cout<<"\n"<<"\n"<<"\n";
+	// while (l < jacob_sequance.size())
+	// {
+	// 	std::cout<<jacob_sequance[l]<<"     ";
+	// 	l++;
+	// }
+	// std::cout<<"\n"<<"\n"<<"\n";
+
+	return (comb_sequance);
+}
+
+
 // pairwise
  void merge_sort(std::vector<int> &vec)
   {
@@ -108,8 +250,11 @@ void print_pair (std::vector <std::pair<int,int> > pair_vec)
 	sort_large_ones(pair_vec);
 	std::cout<<"after sort"<<"\n";
 	print_pair(pair_vec);
+	rebuild(vec,pair_vec);
 
-	unsigned int i=0;
+	unsigned int i=1;
+	main.push_back(pair_vec[0].first);
+	main.push_back(pair_vec[0].second);
 	while(i < pair_vec.size())
 	{
 		main.push_back(pair_vec[i].second);
@@ -120,38 +265,15 @@ void print_pair (std::vector <std::pair<int,int> > pair_vec)
 	{
 		pend.push_back(vec[vec.size()-1]);
 	}
+	Jacobsthal(pend);
 	//  unsigned int j=0;
-	//  unsigned int k=0;
-	// while(j<pend.size())
+	//  std::cout<<"im in main"<<"\n";
+	//  while(j<main.size())
 	// {
-	// 	k=0;
-	// 	while(k+1 < main.size())
-	// 	{
-	// 		if(pend[j] > main[k]&&pend[j]< main[k+1])
-	// 		{
-	// 			main.insert(main.begin() + k+1, pend[j]);
-	// 			break ;
-	// 		}
-	// 		else if(pend[j] < main[k])
-	// 		{
-	// 			main.insert(main.begin() + k, pend[j]);
-	// 			break ;
-	// 		}
-	// 		k++;
-	// 	}
+	// 	std::cout<<main[j]<<"\n";
 	// 	j++;
 	// }
 
-	//  unsigned int j=0;
-	//  while(j<pend.size())
-	// {
-	// 	std::cout<<pend[j]<<"\n";
-	// 	j++;
-	// }
-	 for (unsigned int i = 0; i < vec.size(); i++)
-    {
-        vec[i] = main[i];
-    }
     }
 
 
