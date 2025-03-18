@@ -6,11 +6,12 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:21:31 by ryagoub           #+#    #+#             */
-/*   Updated: 2025/03/17 06:11:36 by ryagoub          ###   ########.fr       */
+/*   Updated: 2025/03/18 07:38:08 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
+// #include <bits/stdc++.h>
 
 template <typename T>
 void swap(T &a , T &b)
@@ -173,9 +174,18 @@ void rebuild(std::vector<int> &vec,std::vector <std::pair<int,int> > &pair_vec)
 		vec.push_back(pair_vec[i].first);
 		vec.push_back(pair_vec[i].second);
 		i++;
-
 	}
 }
+bool in_jacob(int element,std::vector<int> jacob_sequance)
+{
+	for(unsigned int i = 0; i < jacob_sequance.size();i++)
+	{
+		if(jacob_sequance[i] == element)
+			return(1);
+	}
+	return(0);
+}
+
 std::vector<int> Jacobsthal(std::vector<int> &pend)
 {
 	std::vector<int> jacob_sequance;
@@ -195,27 +205,39 @@ std::vector<int> Jacobsthal(std::vector<int> &pend)
 
 	while(i < pend.size())
 	{
-		real_sequance.push_back( i+2);
+		real_sequance.push_back( i + 2);
 		i++;
 	}
-	j =1;
+	j =4;
 	i = 0;
-	comb_sequance.push_back( jacob_sequance[3]);
-	int last=comb_sequance[0];
-	std::cout<<"\n"<<"\n"<<"im hereeee"<<"\n";
-	while(i<pend.size()&&j<pend.size())
+	int last=0;
+	if(jacob_sequance.size()<= 4)
 	{
-		while (real_sequance[i]< last&&real_sequance[i]!= 1)
+		comb_sequance = real_sequance;
+	}
+	if(jacob_sequance.size()>= 4)
+	{
+		comb_sequance.push_back(jacob_sequance[3]);
+		 last=comb_sequance[0];
+	}
+	std::cout<<"\n"<<"\n"<<"im hereeee"<<"\n";
+	while(static_cast<unsigned int> (real_sequance[i])<pend.size() && j < pend.size())
+	{
+		while ((real_sequance[i]< last)&&(real_sequance[i]!= 1))
 		{
-			comb_sequance.push_back(real_sequance[i]);
+			if(in_jacob(real_sequance[i], jacob_sequance)==0)
+				comb_sequance.push_back(real_sequance[i]);
 			i++;
 		}
-		comb_sequance.push_back (jacob_sequance[j]);
+		comb_sequance.push_back(jacob_sequance[j]);
 		last = jacob_sequance[j];
+		std::cout<<"last"<<last<<"\n";
 		j++;
 	}
+
 	unsigned int l =0;
 	std::cout<<"\n"<<"\n"<<"\n";
+	std::cout << "comp size = " << comb_sequance.size() << std::endl;
 	while (l < comb_sequance.size())
 	{
 		std::cout<<comb_sequance[l]<<"     ";
@@ -223,15 +245,22 @@ std::vector<int> Jacobsthal(std::vector<int> &pend)
 	}
 	std::cout<<"\n"<<"\n"<<"\n";
 
-	// unsigned int l =0;
-	// std::cout<<"\n"<<"\n"<<"\n";
-	// while (l < jacob_sequance.size())
-	// {
-	// 	std::cout<<jacob_sequance[l]<<"     ";
-	// 	l++;
-	// }
-	// std::cout<<"\n"<<"\n"<<"\n";
-
+	l =0;
+	std::cout<<"\n"<<"\n"<<"\n";
+	while (l < jacob_sequance.size())
+	{
+		std::cout<<jacob_sequance[l]<<"     ";
+		l++;
+	}
+	std::cout<<"\n"<<"\n"<<"\n";
+	std::cout<<"\n"<<"\n"<<"\n";
+	l =0;
+	while (l < real_sequance.size())
+	{
+		std::cout<<real_sequance[l]<<"     ";
+		l++;
+	}
+	std::cout<<"\n"<<"\n"<<"\n";
 	return (comb_sequance);
 }
 
@@ -250,7 +279,7 @@ std::vector<int> Jacobsthal(std::vector<int> &pend)
 	sort_large_ones(pair_vec);
 	std::cout<<"after sort"<<"\n";
 	print_pair(pair_vec);
-	rebuild(vec,pair_vec);
+
 
 	unsigned int i=1;
 	main.push_back(pair_vec[0].first);
@@ -261,20 +290,53 @@ std::vector<int> Jacobsthal(std::vector<int> &pend)
 		pend.push_back(pair_vec[i].first);
 		i++;
 	}
+	for (unsigned int i = 0; i < main.size();i++)
+		std::cout<<main[i]<<"\n";
 	if(vec.size()%2!=0)
 	{
+		std::cout<<"im here in odd"<<"\n";
 		pend.push_back(vec[vec.size()-1]);
 	}
-	Jacobsthal(pend);
-	//  unsigned int j=0;
-	//  std::cout<<"im in main"<<"\n";
-	//  while(j<main.size())
-	// {
-	// 	std::cout<<main[j]<<"\n";
-	// 	j++;
-	// }
+	std::vector <int> index_vec;
+	index_vec = Jacobsthal(pend);
+	for (unsigned int i = 0; i < index_vec.size();i++)
+			std::cout<<index_vec[i]<<"here"<<"\n";
+	 unsigned int j=0;
+	 if(index_vec.size()!= 0)
+	{
+		while (j < index_vec.size() && static_cast<unsigned int>(index_vec[j]) < pend.size())
+		{
+			std::vector<int>::iterator it = std::lower_bound(main.begin(), main.end(), pend[index_vec[j]]);
+
+			if (it != main.end())
+			{
+				unsigned int index = std::distance(main.begin(), it);
+				main.insert(main.begin() + index , pend[index_vec[j]]);
+			}
+
+			j++;
+		}
+	}
+	 for (unsigned int i = 0; i < pend.size();i++)
+			std::cout<<pend[i]<<"\n";
+	for (unsigned int i = 0; i < main.size();i++)
+		std::cout<<main[i]<<"\n";
+	vec= main;
 
     }
+
+bool parse(std::string s)
+{
+	int len= s.length();
+	for(int i = 0; i < len; i++)
+	{
+		if( s[i] == '-'||s[i]== '+')
+			i++;
+		 if(!isdigit(s[i]))
+			return(0);
+	}
+	return(1);
+}
 
 
 
