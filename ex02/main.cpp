@@ -6,7 +6,7 @@
 /*   By: ryagoub <ryagoub@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 17:21:58 by ryagoub           #+#    #+#             */
-/*   Updated: 2025/03/18 05:52:35 by ryagoub          ###   ########.fr       */
+/*   Updated: 2025/03/21 02:12:39 by ryagoub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int main(int ac, char ** av)
 		while(i < ac)
 		{
 			if(parse(av[i]))
-			{vec.push_back(atoi(av[i]));
+			{
+			vec.push_back(atoi(av[i]));
 			deq.push_back(atoi(av[i]));
 			i++;}
 			else
@@ -36,17 +37,26 @@ int main(int ac, char ** av)
 		{
 			std::cout<<vec[i]<<" ";
 		}
-		 merge_sort(vec);
+		std::cout<<"\n";
+		 merge_insertion_sort(vec);
+		 merge_insertion_sort_deq(deq);
+		std::cout<<"vec.size"<<vec.size()<<"\n"<<"\n";
 		std::cout<<"After: ";
 		for(unsigned int i=0 ; i < vec.size(); i++)
 		{
 			std::cout<<vec[i]<<" ";
 		}
+		// std::cout<<"\n";
+		// for(unsigned int i=0 ; i < deq.size(); i++)
+		// {
+		// 	std::cout<<deq[i]<<" ";
+		// }
 		std::cout<<std::endl;
 		if (std::is_sorted(vec.begin(), vec.end()))
-        	std::cout << "Sorted" << std::endl;
+        {	std::cout << "Sorted" << std::endl;
+		std::cout<<"vec.size"<<vec.size()<<"\n";
+		}
     	else
         	std::cout << "Not Sorted" << std::endl;
 	}
-
 }
