@@ -1,7 +1,7 @@
 #ifndef BITCOINEXCHANGE
 #define BITCOINEXCHANGE
 #include <iostream>
-#include <vector>
+#include <list>
 #include <string>
 #include <sstream>
 #include <cmath>
@@ -15,9 +15,17 @@
 	int year;
 	float value;
 }t_info;
+class BitcoinExchange
+ {
+	public:
+	BitcoinExchange();
+	BitcoinExchange(const BitcoinExchange &obj);
+	BitcoinExchange&operator=(const BitcoinExchange &other);
+	~BitcoinExchange();
+
+	void parse(std::string &line);
+ };
 
 
-void parse(std::string &line);
-std::vector<std::string> split(std::string s, char delim);
 
 #endif

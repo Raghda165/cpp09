@@ -12,6 +12,14 @@
 
 #include "BitcoinExchange.hpp"
 
+BitcoinExchange::BitcoinExchange(){}
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &obj){(void)obj;}
+BitcoinExchange & BitcoinExchange::operator=(const BitcoinExchange &other)
+{
+	(void)other;
+	return (*this);}
+BitcoinExchange::~BitcoinExchange(){}
+
 bool is_all_digit(std::string s)
 {
 	int len= s.length();
@@ -56,16 +64,16 @@ bool include_pipe(std::string &line)
         return(0);
     return(1);
 }
-std::vector<std::string> split(std::string s, char delim)
+std::list<std::string> split(std::string s, char delim)
 {
 	std::stringstream ss(s);
 	std::string word;
-	std::vector <std::string> s_vector;
+	std::list <std::string> s_list;
 	while (std::getline(ss,word,delim))
 	{
-		s_vector.push_back(word);
+		s_list.push_back(word);
 	}
-	return(s_vector);
+	return(s_list);
 }
 bool parse_day_month_year(std::string &s,int flag)
 {
@@ -87,16 +95,19 @@ bool parse_day_month_year(std::string &s,int flag)
 
 std::string parse_date(std::string & s)
 {
-	std::vector <std::string> d_vec= split(s,'-');
-	if(d_vec.size()< 3)
+	std::list <std::string> d_list= split(s,'-');
+	if(d_list.size()< 3)
 	{
 		return("none");
 	}
-	if(parse_day_month_year(d_vec[2],0)==0)
+	std::list <std::string> :: iterator it = d_list.begin();
+	if(parse_day_month_year(*it,2)==0)
 		return("none");
-	if(parse_day_month_year(d_vec[1],1)==0)
+	++it;
+	if(parse_day_month_year(*it,1)==0)
 		return("none");
-	if(parse_day_month_year(d_vec[0],2)==0)
+	++it;
+	if(parse_day_month_year(*it,0)==0)
 		return("none");
 	return (s);
 }
@@ -112,44 +123,50 @@ void extract_info(std::string date ,std::string value, t_info &d)
 	double num ;
 	s1>>num;
 	d.value = static_cast<float>(num);
-	std::vector <std::string> d_vec= split(date,'-');
-	std::stringstream ss(d_vec[2]);
-	double num1 ;
-	ss>>num1;
-	d.day= static_cast<int> (num1);
-	std::stringstream s2(d_vec[1]);
-	double num2 ;
-	s2>>num2;
-	d.month= static_cast<int> (num2);
-	std::stringstream s3(d_vec[0]);
+	std::list <std::string> d_list= split(date,'-');
+	if(d_list.size()<3 )
+		return ;
+	std::list <std::string> ::iterator it = d_list.begin();
+	std::stringstream s3(*it);
 	double num3 ;
 	s3>>num3;
 	d.year= static_cast<int> (num3);
+	++it;
+	std::stringstream s2(*it);
+	double num2 ;
+	s2>>num2;
+	d.month= static_cast<int> (num2);
+	++it;
+	std::stringstream ss(*it);
+	double num1 ;
+	ss>>num1;
+	d.day= static_cast<int> (num1);
+
 }
 
-void parse(std::string &line)
+void BitcoinExchange:: parse(std::string &line)
 {
 	std::string date;
 	std::string value;
 	t_info user_info;
 	float target_value= 0;
-    // if(include_pipe(line))
-    // {
-		std:: vector <std::string> s_vec=split(line ,'|');
-		if(s_vec.size()> 2)
+		std:: list <std::string> s_list=split(line ,'|');
+		if(s_list.size()> 2)
 			return ;
-        if(s_vec.size()<= 2)
+        if(s_list.size()<= 2)
 		{
-			if (parse_date(s_vec[0])== "none")
+			std:: list <std::string> ::iterator it = s_list.begin();
+			if (parse_date(*it)== "none")
 			{
-				std::cout <<"Error: bad input => "<< s_vec[0]<<"\n";
+				std::cout <<"Error: bad input => "<< *it<<"\n";
 				 return ;
 			}
-			float value = parse_value(s_vec[1]);
+			float value = parse_value(*(++it));
 			if(value == -1)
 			{
 					return ;}
-			extract_info( s_vec[0] , s_vec[1],user_info);
+			std:: list <std::string> ::iterator it2 = s_list.begin();
+			extract_info( *it2 , *(++it2),user_info);
 
 			std::string line1;
 			std::ifstream db_file("data.csv");
@@ -160,9 +177,10 @@ void parse(std::string &line)
 				std::string value;
 				std::string date;
 				t_info origin_info;
-				std:: vector <std::string> s_vec=split(line ,',');
-				date=s_vec[0];
-				value = s_vec[1];
+				std:: list <std::string> s_list=split(line ,',');
+				std:: list <std::string> ::iterator it = s_list.begin();
+				date= *it;
+				value = *(++it);
 				extract_info( date , value,origin_info);
 				if(smallest_difference > get_difference(user_info,origin_info))
 				{

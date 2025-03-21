@@ -1,5 +1,5 @@
 NAME = RPN
-CPPFILES = main.cpp 
+CPPFILES = main.cpp RPN.cpp
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 CPP = c++
 
